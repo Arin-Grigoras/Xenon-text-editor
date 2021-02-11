@@ -73,6 +73,7 @@ struct editorConfig E;
 
 void editorSetStatusMessage(const char *fmt, ...);
 void editorRefreshScreen();
+char *editorPrompt(char *prompt);
 
 
 //TERMINAL
@@ -315,6 +316,18 @@ void editorRowInsertChar(erow *row, int at, int c) {
 }
 
 
+
+void editorRowDelChar(erow *row, int at) {
+    if (at < 0 || at >= row->size) return;
+    memmove(&row->chars[at], &row->chars[at + 1], row->size - at);
+    row->size--;
+    editorUpdateRow(row);
+    E.dirty++;
+}
+
+
+
+
 void editorRowAppendString(erow *row, char *s, size_t len) {
     row->chars = realloc(row->chars, row->size + len + 1);
     memcpy(&row->chars[row->size], s, len);
@@ -451,10 +464,10 @@ void editorFind() {
         erow *row = &E.row[i];
         char *match = strstr(row->render, query);
         if (match) {
-            E.cy = i;
-            E.cx = match - row->render;
-            E.rowoff = E.numrows;
-            break;
+        E.cy = i;
+        E.cx = editorRowRxToCx(row, match - row->render);
+        E.rowoff = E.numrows;
+        break;
         }
     }
     free(query);
@@ -725,6 +738,9 @@ void editorProcessKeypress() {
         if (E.cy < E.numrows)
             E.cx = E.row[E.cy].size;
         break;
+        case CTRL_KEY('f'):
+        editorFind();
+        break;
         case BACKSPACE:
         case CTRL_KEY('h'):
         case DEL_KEY:
@@ -785,22 +801,24 @@ void initEditor() {
 
 
 
+
 int main(int argc, char *argv[]) {
-  enableRawMode();
+    enableRawMode();
 
-  initEditor();
+    initEditor();
 
-  if (argc >= 2) {
-    editorOpen(argv[1]);
-  }
+    if (argc >= 2) {
+        editorOpen(argv[1]);
+    }
 
-  editorSetStatusMessage("HELP: Ctrl-S = save | Ctrl-Q = quit");
+    editorSetStatusMessage(
+        "HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
 
-  while (1) {
-    editorRefreshScreen();
-    editorProcessKeypress();
-  }
+    while (1) {
+        editorRefreshScreen();
+        editorProcessKeypress();
+    }
 
-
-  return 0;
+    
+    return 0;
 }
