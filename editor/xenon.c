@@ -104,7 +104,7 @@ struct editorConfig E;
 char *C_HL_extensions[] = { ".c", ".h", ".cpp", ".py", NULL };
 
 char *C_HL_keywords[] = {
-  "switch", "include", "if", "while", "for", "break", "continue", "return", "else",
+  "switch", "#include", "if", "while", "for", "break", "continue", "return", "else",
   "struct", "union", "typedef", "static", "enum", "class", "case", "import",
   "and", "as", "in", "or", "elif", "True", "False", "def", "del",
   "int|", "long|", "double|", "float|", "char|", "unsigned|", "signed|",
