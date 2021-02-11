@@ -101,11 +101,12 @@ struct editorConfig E;
 
 
 //FILETYPES
-char *C_HL_extensions[] = { ".c", ".h", ".cpp", NULL };
+char *C_HL_extensions[] = { ".c", ".h", ".cpp", ".py", NULL };
 
 char *C_HL_keywords[] = {
-  "switch", "if", "while", "for", "break", "continue", "return", "else",
-  "struct", "union", "typedef", "static", "enum", "class", "case",
+  "switch", "include", "if", "while", "for", "break", "continue", "return", "else",
+  "struct", "union", "typedef", "static", "enum", "class", "case", "import",
+  "and", "as", "in", "or", "elif", "True", "False", "def", "del",
   "int|", "long|", "double|", "float|", "char|", "unsigned|", "signed|",
   "void|", NULL
 };
